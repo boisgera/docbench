@@ -14,7 +14,9 @@ be tested too and use to generate profiles.
 """
 
 # Python 2.7 Standard Library
+import argparse
 import doctest
+import json
 import os.path
 import time
 import sys
@@ -66,6 +68,19 @@ __version__ = None
 #
 # TODO: implement a "-m" mode like doctest.
 #
+# TODO: for sequence of benchs in a module, can we ensure that source order is 
+#       preserved ?
+# 
+
+def _source_order(self, other):
+    """
+    Source order for doctests
+    """
+    if not isinstance(other, doctest.DocTest):
+        return -1
+    return cmp((self.filename, self.lineno, self.name, id(self)),
+               (other.filename, other.lineno, other.name, id(other)))
+
 def get_tests(*objects):
     tests = []
     for object_ in objects:
@@ -73,7 +88,9 @@ def get_tests(*objects):
              tests.append(object_)
          else:
              find_tests = doctest.DocTestFinder().find
-             tests.extend(find_tests(object_))
+             _tests = find_tests(object_)
+             _tests.sort(cmp=_source_order)
+             tests.extend(_tests)
     return tests
 
 def benchmark(*objects, **options):
@@ -149,32 +166,63 @@ def test():
    >>> while a < 10000000:
    ...     a += 1
    """
-   doctest_ = doctest.DocTestFinder().find(test)[0] 
-   print benchmark(doctest_)
+   pass
 
+#
+# Table Formatter
+# ------------------------------------------------------------------------------
+#
 
+def table(cells):
+    left_width = max(len(str(x)) for x, _ in cells)
+    left_width = max(left_width, len("  Benchmark"))
+    right_width = max(len(str(x)) for _, x in cells)
+    right_width = max(right_width, len("Time  "))
+    template = "{0:<" + str(left_width) + "}  {1:<" + str(right_width) + "}\n"
+    text = template.format("Benchmark", "Time")
+    text += template.format(left_width*"-", right_width*"-")
+    for name, info in cells:
+        text += template.format(name, "{0:.3g}".format(info))
+    return text
 
 #
 # Main Entry Point
 # ------------------------------------------------------------------------------
 #
 
-def main(filename):
+def main(args):
+    filename = args.filename
+    output = args.output
+    format = args.format
     if not filename.endswith(".py"):
-         raise ValueError("{0!r} is not a Python file")
+         raise ValueError("{0!r} is not a Python file".format(filename))
     dirname, filename = os.path.split(filename)
     basename = filename[:-3]
     sys.path.insert(0, dirname)
     module = __import__(basename)
     del sys.path[0]
-    print benchmark(module)
+    results = benchmark(module)
 
+    if format == "text":
+        content = table(results)
+    elif format == "json":
+        content = json.dumps(results)
+    else:
+        raise ValueError("unknown format {0!r}".format(format))
+    output.write(content)
+    try:
+        output.flush()
+    except AttributeError:
+        pass
 
 if __name__ == "__main__":
-    try:
-        filename = sys.argv[1]
-    except IndexError:
-        print "usage: docbench FILENAME"
-        sys.exit(1)
-    main(filename)
+    parser = argparse.ArgumentParser(description="Run benchmarks")
+    parser.add_argument("filename", metavar="FILENAME", help="benchmark container")
+    parser.add_argument("-o", "--output", nargs="?", type=argparse.FileType('w'), default=sys.stdout,
+                        help="output file")
+    parser.add_argument("-f", "--format", nargs="?", default="text")
+    args = parser.parse_args()
+    
+    main(args)
+    
 
