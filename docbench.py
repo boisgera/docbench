@@ -15,11 +15,16 @@ be tested too and use to generate profiles.
 
 # Python 2.7 Standard Library
 import argparse
+import cProfile
 import doctest
 import json
 import os.path
 import time
 import sys
+
+# Third-Party Libraries
+import path # forked-path
+import lsprofcalltree
 
 #
 # Misc. Notes
@@ -108,10 +113,10 @@ def benchmark(*objects, **options):
         for i in range(n):
             globs = test.globs.copy()
             for code in codes[:-1]: # setup 
-                exec code in test.globs
+                exec code in globs
             statement = codes[-1]
             start = time.time()
-            exec statement in test.globs
+            exec statement in globs
             stop = time.time()
             times.append(stop - start)
         results.append((test.name, filter(times)))
@@ -122,6 +127,27 @@ def benchmark(*objects, **options):
 
 # profile options for kcg (save to file or let the user do it) ? use a tmp
 # dir and LAUNCH kcg ? Support pstats stuff ?
+
+def profile(output, *objects):
+    tests = get_tests(*objects)
+    results = []
+    for test in tests:
+        if len(test.examples) == 0:
+            continue
+        #filename = "<doctest {0!r}>".format(test.name)
+        profile = cProfile.Profile()
+        output_file = open(output / (test.name + ".kcg"), "w")
+        codes = [compile(ex.source, test.filename, "exec") for ex in test.examples]
+        locs = {}
+        globs = test.globs.copy()
+        for code in codes[:-1]: # setup 
+            exec code in globs
+        statement = codes[-1]
+        profile.runctx(statement, globs, locs)
+        kcg_profile = lsprofcalltree.KCacheGrind(profile)
+        kcg_profile.output(output_file)
+        output_file.close()
+
 """
 def profile(command, output=None):
     output = "bitstream.kcg"
@@ -165,8 +191,17 @@ def test():
    2
    >>> while a < 10000000:
    ...     a += 1
+   >>> fib()
+   42
    """
    pass
+
+def fib():
+    a, b = 1, 1
+    while a < 100000000000:
+        a, b = b, a + b
+    return 42
+    
 
 #
 # Table Formatter
@@ -190,10 +225,12 @@ def table(cells):
 # ------------------------------------------------------------------------------
 #
 
-def main(args):
-    filename = args.filename
-    output = args.output
-    format = args.format
+def main(**kwargs):
+    filename = kwargs["filename"]
+    output = kwargs["output"]
+    format = kwargs["format"]
+    do_profile = kwargs["profile"]
+
     if not filename.endswith(".py"):
          raise ValueError("{0!r} is not a Python file".format(filename))
     dirname, filename = os.path.split(filename)
@@ -203,6 +240,16 @@ def main(args):
     del sys.path[0]
     results = benchmark(module)
 
+    if do_profile:
+        dir = path.path("profiles")
+        if dir.exists():
+            if not dir.isdir():
+                raise OSError("'profiles' is not a directory")
+            # TODO: check permissions ?
+        else:
+            dir.mkdir()
+        profile(dir, module)
+        
     if format == "text":
         content = table(results)
     elif format == "json":
@@ -215,14 +262,18 @@ def main(args):
     except AttributeError:
         pass
 
+def testargs(**kwargs):
+    print kwargs
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run benchmarks")
     parser.add_argument("filename", metavar="FILENAME", help="benchmark container")
     parser.add_argument("-o", "--output", nargs="?", type=argparse.FileType('w'), default=sys.stdout,
                         help="output file")
     parser.add_argument("-f", "--format", nargs="?", default="text")
+    parser.add_argument("-p", "--profile", action="store_true", default=False)
     args = parser.parse_args()
     
-    main(args)
+    main(**vars(args))
     
 
