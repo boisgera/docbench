@@ -33,14 +33,11 @@ def get_metadata(module):
             metadata["author_email"] = email = match.groups()[0]
             metadata["author"] = author.replace("<" + email + ">", "").strip()
 
-    # Get the module short/long description from the docstring
+    # Get the module short description from the docstring
     doc = inspect.getdoc(module) or ""
     if doc:
         lines = doc.splitlines()
         metadata["description"] = lines[0]
-        extra = "\n".join(lines[1:]).strip()
-        if extra:
-            metadata["long_description"] = extra
 
     # Process trove classifiers
     classifiers = metadata.get("classifiers", None)
@@ -87,8 +84,8 @@ info.update(requirements)
 
 if __name__ == "__main__":
     if "register" in sys.argv[1:]:
-         long_description = metadata["long_description"]
-         if long_description:
-              metadata["long_description"] = get_some_reST(long_description)
+         README_md = open("README.md").read()
+         README_rst = get_some_reST(README_md)
+         metadata["long_description"] = README_rst
     setuptools.setup(**info)
 
