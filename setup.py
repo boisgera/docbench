@@ -19,7 +19,7 @@ def get_metadata(module):
     metadata = {}
 
     # Read the relevant __*__ module attributes
-    for name in "name author license url classifiers".split():
+    for name in "name author version license url classifiers".split():
         value = getattr(module, "__" + name + "__", None)
         if value:
             metadata[name] = value
