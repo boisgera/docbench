@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-from primes import primes, sieve
-
 def test_primes():
     """
     >>> from primes import primes
