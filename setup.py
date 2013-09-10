@@ -86,6 +86,6 @@ if __name__ == "__main__":
     if "register" in sys.argv[1:]:
          README_md = open("README.md").read()
          README_rst = get_some_reST(README_md)
-         metadata["long_description"] = README_rst
+         info["long_description"] = README_rst
     setuptools.setup(**info)
 
