@@ -90,7 +90,7 @@ def benchmark(objects, n=3, select_time=min, disable_gc=True):
     return results
 
 def profile(objects, output_dir=None):
-    output = path.path(output)
+    output = path.path(output_dir)
     tests = get_tests(objects)
     results = []
     for test in tests:
