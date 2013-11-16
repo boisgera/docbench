@@ -9,44 +9,10 @@ import re
 import sys
 
 # Third-Party Libraries
+import about
 import setuptools
 
 # ------------------------------------------------------------------------------
-
-def get_metadata(module):
-    "Extract and process embedded module metadata"
- 
-    metadata = {}
-
-    # Read the relevant __*__ module attributes
-    for name in "name author version license url classifiers".split():
-        value = getattr(module, "__" + name + "__", None)
-        if value:
-            metadata[name] = value
-
-    # Search for author email with <...@...> syntax in the author field
-    author = metadata.get("author", None)
-    if author:
-        email_pattern = r"<([^>]+@[^>]+)>"
-        match = re.search(email_pattern, author)
-        if match:
-            metadata["author_email"] = email = match.groups()[0]
-            metadata["author"] = author.replace("<" + email + ">", "").strip()
-
-    # Get the module short description from the docstring
-    doc = inspect.getdoc(module) or ""
-    if doc:
-        lines = doc.splitlines()
-        metadata["description"] = lines[0]
-
-    # Process trove classifiers
-    classifiers = metadata.get("classifiers", None)
-    if classifiers and isinstance(classifiers, str):
-        classifiers = [l.strip() for l in classifiers.splitlines() if l.strip()]
-        metadata["classifiers"] = classifiers
-
-    return metadata
-
 def get_some_reST(markdown):
     "Markdown to reStructuredText converter"
     try:
@@ -65,12 +31,10 @@ def get_some_reST(markdown):
 
 # ------------------------------------------------------------------------------
 
-sys.path.insert(0, ".")
-import docbench
-metadata = get_metadata(docbench)
+metadata = about.get_metadata("docbench/__about__.py")
 
 contents = dict(
-  py_modules = [metadata["name"]],
+  packages = ["docbench"],
 )
 
 requirements = dict(
