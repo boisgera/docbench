@@ -1,7 +1,10 @@
 *~
 *.pyc
+*.bak
 
 sandbox
 build
 dist
+
+setup.cfg
 *.egg-info
