@@ -9,8 +9,9 @@ import re
 import sys
 
 # Third-Party Libraries
-import about
 import setuptools
+sys.path.insert(0, os.getcwd()); import about
+
 
 # ------------------------------------------------------------------------------
 def get_some_reST(markdown):
@@ -31,7 +32,7 @@ def get_some_reST(markdown):
 
 # ------------------------------------------------------------------------------
 
-metadata = about.get_metadata("docbench/__about__.py")
+metadata = about.get_metadata("__about__", os.path.join(os.getcwd(), "docbench"))
 
 contents = dict(
   packages = ["docbench"],
