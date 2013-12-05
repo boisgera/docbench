@@ -10,7 +10,10 @@ import sys
 
 # Third-Party Libraries
 import setuptools
-sys.path.insert(0, os.getcwd()); import about
+
+# Local Libraries
+sys.path.insert(0, os.getcwd())
+import about
 
 
 # ------------------------------------------------------------------------------
@@ -32,14 +35,14 @@ def get_some_reST(markdown):
 
 # ------------------------------------------------------------------------------
 
-metadata = about.get_metadata("__about__", os.path.join(os.getcwd(), "docbench"))
+metadata = about.get_metadata("__about__", "docbench")
 
 contents = dict(
   packages = ["docbench"],
 )
 
 requirements = dict(
-  install_requires = ["lsprofcalltree", "path.py==3.2"],
+  install_requires = ["lsprofcalltree", "path.py"],
 )
 
 info = {}
