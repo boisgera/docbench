@@ -14,8 +14,8 @@ import setuptools
 sys.path.insert(0, "lib"); import about
 sys.path.insert(0, "docbench"); import __about__ as about_docbench
 
-
-about_docbench.__doc__ = open("README.md").read()
+lines = open("README.md").read().splitlines()
+about_docbench.__doc__ = "\n".join([lines[0]] + lines[2:])
 metadata = about.get_metadata(about_docbench)
 
 contents = dict(
