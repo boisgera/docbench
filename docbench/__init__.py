@@ -20,6 +20,12 @@ import lsprofcalltree
 #
 from .__about__ import *
 
+# TODO
+# ------------------------------------------------------------------------------
+#
+#   - *DO NOT* disable gc by default.
+#   - expose the arguments of `benchmark` in `benchmod`.
+
 #
 # ------------------------------------------------------------------------------
 #
