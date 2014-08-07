@@ -1,2 +1,3 @@
-include about.py
+include lib/*.py
+include doc/doc.rst
 

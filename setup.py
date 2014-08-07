@@ -4,7 +4,6 @@
 # Python 2.7 Standard Library
 import inspect
 import os
-import os.path
 import re
 import sys
 
@@ -12,30 +11,12 @@ import sys
 import setuptools
 
 # Local Libraries
-sys.path.insert(0, os.getcwd())
-import about
+sys.path.insert(0, "lib"); import about
+sys.path.insert(0, "docbench"); import __about__ as about_docbench
 
 
-# ------------------------------------------------------------------------------
-def get_some_reST(markdown):
-    "Markdown to reStructuredText converter"
-    try:
-        import sh; pandoc = sh.pandoc
-    except:
-        error  = "sh.py and/or pandoc not available.\n"
-        error += "  sh.py:  <http://amoffat.github.io/sh/>\n"
-        error += "  pandoc: <http://johnmacfarlane.net/pandoc/>"
-        raise ImportError(error)
-    with open("tmp.md", "w") as markdown_file:
-        markdown_file.write(markdown)
-    restructuredtext = sh.pandoc("-w", "rst", "tmp.md")
-    os.remove("tmp.md")
-    return restructuredtext
-
-
-# ------------------------------------------------------------------------------
-
-metadata = about.get_metadata("__about__", "docbench")
+about_docbench.__doc__ = open("README.md").read()
+metadata = about.get_metadata(about_docbench)
 
 contents = dict(
   packages = ["docbench"],
@@ -51,9 +32,5 @@ info.update(contents)
 info.update(requirements)
 
 if __name__ == "__main__":
-    if "register" in sys.argv[1:]:
-         README_md = open("README.md").read()
-         README_rst = get_some_reST(README_md)
-         info["long_description"] = README_rst
     setuptools.setup(**info)
 

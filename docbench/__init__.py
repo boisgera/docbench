@@ -5,10 +5,10 @@
 import argparse
 import cProfile
 import doctest
-import json
 import gc
-import time
+import json
 import sys
+import time
 
 # Third-Party Libraries
 import path # from "path.py": <https://pypi.python.org/pypi/path.py>
