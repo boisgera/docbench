@@ -16,5 +16,5 @@ def benchmark_sieve():
 
 if __name__ == "__main__":
     import docbench
-    docbench.benchmod()
+    docbench.benchmod(profile=True)
 

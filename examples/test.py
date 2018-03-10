@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Python Standard Library
+import sys
+
+
 def test_primes():
     """
     >>> from primes import primes
@@ -18,5 +22,6 @@ def test_sieve():
 
 if __name__ == "__main__":
     import doctest
+    profile = "--profile" in sys.argv
     doctest.testmod()
 

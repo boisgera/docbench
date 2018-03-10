@@ -81,7 +81,7 @@ def benchmark(objects, n=3, select_time=min, disable_gc=True):
     return results
 
 def profile(objects, output_dir=None):
-    output = path.path(output_dir)
+    output = path.Path(output_dir)
     tests = get_tests(objects)
     results = []
     for test in tests:
@@ -127,7 +127,7 @@ def benchmod(module=None, filename=None, output=sys.stdout, format="text", profi
         if filename is None:
             module = sys.modules.get("__main__")
         else:
-            filename = path.path(filename).abspath()
+            filename = path.Path(filename).abspath()
             if not filename.endswith(".py"):
                  error = "{0!r} is not a Python file"
                  raise ValueError(error.format(filename))
@@ -144,7 +144,7 @@ def benchmod(module=None, filename=None, output=sys.stdout, format="text", profi
 
     if profile:
         # TODO: migrate this logic to docbench.profile.
-        dir = path.path("profiles")
+        dir = path.Path("profiles")
         if dir.exists():
             if not dir.isdir():
                 raise OSError("'profiles' is not a directory")
