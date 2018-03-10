@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -e
+
 cd examples
 
-python benchmark.py
-python benchmark.py --profile
+python benchmark.py | grep benchmark_primes
 
+python benchmark.py --profile > /dev/null
+ls profiles/*.kcg
