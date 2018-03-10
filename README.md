@@ -1,3 +1,5 @@
+![Build status](https://travis-ci.org/boisgera/docbench.svg?branch=master)
+
 Docbench -- Benchmark with Doctest
 ================================================================================
 
