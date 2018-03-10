@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd examples
+
+python benchmark.py
+python benchmark.py --profile
+
