@@ -9,6 +9,8 @@ you should be able to use docbench in minutes.
 
 [doctest]: http://docs.python.org/2/library/doctest.html
 
+
+Example
 --------------------------------------------------------------------------------
 
 We will walk you through the use of docbench with a simple use case: 
