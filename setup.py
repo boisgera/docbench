@@ -23,7 +23,7 @@ contents = dict(
 )
 
 requirements = dict(
-  install_requires = ["lsprofcalltree", "path.py"],
+  install_requires = ["lsprofcalltree"],
 )
 
 info = {}
