@@ -4,9 +4,8 @@ Docbench -- Benchmark with Doctest
 ================================================================================
 
 Docbench is a framework based on [doctest][] to benchmark Python code.
-If you already are familiar with doctest, you should be able to use docbench
-in minutes. And if you find that doctest is convenient -- or Pythonic -- 
-hopefully you will feel the same about docbench !
+If you already are familiar with doctest, 
+you should be able to use docbench in minutes. 
 
 [doctest]: http://docs.python.org/2/library/doctest.html
 

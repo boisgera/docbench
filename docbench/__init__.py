@@ -14,22 +14,13 @@ import time
 from pathlib2 import Path
 import lsprofcalltree
 
-#
+
 # Metadata
 # ------------------------------------------------------------------------------
-#
 from .__about__ import *
 
-# TODO
-# ------------------------------------------------------------------------------
-#
-#   - *DO NOT* disable gc by default.
-#   - expose the arguments of `benchmark` in `benchmod`.
 
-#
 # ------------------------------------------------------------------------------
-#
-
 def doctest_cmp(self, other):
     """
     Order of appearance of doctests in source code
@@ -101,11 +92,9 @@ def profile(objects, output_dir=None):
         kcg_profile.output(output_file)
         output_file.close()
 
-#
+
 # Table Formatter
 # ------------------------------------------------------------------------------
-#
-
 def table(cells):
     left_width = max(len(str(x)) for x, _ in cells)
     left_width = max(left_width, len("  Benchmark"))
@@ -118,11 +107,9 @@ def table(cells):
         text += template.format(name, "{0:.3g}".format(info))
     return text
 
-#
+
 # Main Entry Point
 # ------------------------------------------------------------------------------
-#
-
 def benchmod(module=None, filename=None, output=sys.stdout, format="text", profile=False):
     if module is None:
         if filename is None:
@@ -170,11 +157,8 @@ def benchmod(module=None, filename=None, output=sys.stdout, format="text", profi
     return results
 
 
-#
 # Command-Line Arguments Analysis
 # ------------------------------------------------------------------------------
-#
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Benchmark Runner")
     parser.add_argument("filename", metavar="FILENAME", help="benchmark file")
@@ -186,5 +170,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     benchmod(**vars(args))
-    
 
