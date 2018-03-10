@@ -11,7 +11,7 @@ import sys
 import time
 
 # Third-Party Libraries
-import path # from "path.py": <https://pypi.python.org/pypi/path.py>
+from pathlib2 import Path
 import lsprofcalltree
 
 #
@@ -81,14 +81,15 @@ def benchmark(objects, n=3, select_time=min, disable_gc=True):
     return results
 
 def profile(objects, output_dir=None):
-    output = path.Path(output_dir)
+    output = Path(output_dir)
+    output.mkdir(parents=True, exist_ok=True)
     tests = get_tests(objects)
     results = []
     for test in tests:
         if len(test.examples) == 0:
             continue
         profile = cProfile.Profile()
-        output_file = open(output / (test.name + ".kcg"), "w")
+        output_file = (output / (test.name + '.kcg')).open('wb')
         codes = [compile(ex.source, test.filename, "exec") for ex in test.examples]
         locs = {}
         globs = test.globs.copy()
@@ -127,11 +128,11 @@ def benchmod(module=None, filename=None, output=sys.stdout, format="text", profi
         if filename is None:
             module = sys.modules.get("__main__")
         else:
-            filename = path.Path(filename).abspath()
+            filename = str(Path(filename).resolve())
             if not filename.endswith(".py"):
                  error = "{0!r} is not a Python file"
                  raise ValueError(error.format(filename))
-            sys.path.insert(0, filename.dirname())
+            sys.insert(0, filename.dirname())
             try:
                 module = __import__(filename.namebase)
             except ImportError:
@@ -143,15 +144,14 @@ def benchmod(module=None, filename=None, output=sys.stdout, format="text", profi
     results = benchmark(module)
 
     if profile:
-        # TODO: migrate this logic to docbench.profile.
-        dir = path.Path("profiles")
+        dir = Path("profiles")
         if dir.exists():
-            if not dir.isdir():
+            if not dir.is_dir():
                 raise OSError("'profiles' is not a directory")
         else:
-            dir.mkdir()
+            dir.mkdir(parents=True, exist_ok=True)
         import docbench
-        docbench.profile(module, output_dir=dir)
+        docbench.profile(module, output_dir=str(dir))
 
     if format == "text":
         content = table(results)
