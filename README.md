@@ -1,6 +1,6 @@
 [![Build status](https://travis-ci.org/boisgera/docbench.svg?branch=master)](https://travis-ci.org/boisgera/docbench)
 
-Docbench -- Benchmark with Doctest
+Docbench: Benchmark with Doctest
 ================================================================================
 
 Docbench is a framework based on [doctest][] to benchmark Python code.
@@ -46,7 +46,7 @@ computations and therefore should be faster.
         return p
 
 
-Doctest -- Does it Work ?
+Does it Work?
 --------------------------------------------------------------------------------
 
 **If you already know doctest, you may skip this section.**
@@ -88,7 +88,7 @@ You are ready to execute this test suite with:
 No error displayed ? The `primes` module has successfully passed all tests !
 
 
-Docbench -- Is is Fast ?
+Is is Fast?
 --------------------------------------------------------------------------------
 
 Create a new file name `benchmark.py`. Add functions that act as docbench 
