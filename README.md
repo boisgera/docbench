@@ -1,6 +1,6 @@
 [![Build status](https://travis-ci.org/boisgera/docbench.svg?branch=master)](https://travis-ci.org/boisgera/docbench)
 
-Docbench: Benchmark with Doctest
+Docbench: Doctests Benchmarking
 ================================================================================
 
 Docbench is a framework based on [doctest][] to benchmark Python code.
