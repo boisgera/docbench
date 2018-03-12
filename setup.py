@@ -43,7 +43,7 @@ contents = dict(
   packages = ["docbench"],
 )
 
-install_requires = ["lsprofcalltree>=0.0.2"]
+install_requires = ["lsprofcalltree>=0.0.3"]
 if sys.version_info < (3, 0):
     install_requires.append("pathlib2")
 
