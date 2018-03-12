@@ -57,11 +57,11 @@ def benchmark(objects, n=3, select_time=min, disable_gc=True):
             globs = test.globs.copy()
             setup, statement = codes[:-1], codes[-1]
             for code in setup:
-                exec code in globs
+                exec(code, globs)
             if disable_gc:
                 gc.disable()
             start = time.time()
-            exec statement in globs
+            exec(statement, globs)
             stop = time.time()
             if disable_gc:
                 gc.enable()
