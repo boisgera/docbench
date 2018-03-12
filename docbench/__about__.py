@@ -19,5 +19,5 @@ Topic :: System :: Benchmark
 )
 
 globals().update(metadata)
-__all__ = metadata.keys()
+__all__ = list(metadata.keys())
 __all__.remove("__name__")
