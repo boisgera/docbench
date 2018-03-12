@@ -11,7 +11,10 @@ import sys
 import time
 
 # Third-Party Libraries
-from pathlib2 import Path
+try:
+    from pathlib import Path
+except Importerror:
+    from pathlib2 import Path
 import lsprofcalltree
 
 
