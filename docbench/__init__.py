@@ -86,7 +86,7 @@ def profile(objects, output_dir=None):
         globs = test.globs.copy()
         setup, statement = codes[:-1], codes[-1]
         for code in setup:
-            exec code in globs
+            exec(code, globs)
         profile.runctx(statement, globs, locs)
         kcg_profile = lsprofcalltree.KCacheGrind(profile)
         kcg_profile.output(output_file)
