@@ -13,7 +13,7 @@ import time
 # Third-Party Libraries
 try:
     from pathlib import Path
-except Importerror:
+except ImportError:
     from pathlib2 import Path
 import lsprofcalltree
 
