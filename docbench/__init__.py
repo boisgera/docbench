@@ -24,14 +24,11 @@ from .__about__ import *
 
 
 # ------------------------------------------------------------------------------
-def doctest_cmp(self, other):
+def doctest_key(test):
     """
     Order of appearance of doctests in source code
     """
-    if not isinstance(other, doctest.DocTest):
-        return -1
-    return cmp((self.filename, self.lineno, self.name, id(self)),
-               (other.filename, other.lineno, other.name, id(other)))
+    return (test.filename, test.lineno, test.name, id(test))
 
 def get_tests(objects):
     if not isinstance(objects, list):
@@ -43,7 +40,7 @@ def get_tests(objects):
          else:
              find_tests = doctest.DocTestFinder().find
              _tests = find_tests(object_)
-             _tests.sort(cmp=doctest_cmp)
+             _tests.sort(key=doctest_key)
              tests.extend(_tests)
     return tests
 
