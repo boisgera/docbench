@@ -80,7 +80,11 @@ def profile(objects, output_dir=None):
         if len(test.examples) == 0:
             continue
         profile = cProfile.Profile()
-        output_file = (output / (test.name + '.kcg')).open('wb')
+        path = output / (test.name + '.kcg')
+        try:
+            output_file = path.open('w', encoding='utf-8')
+        except TypeError:
+            output_file = path.open('w')
         codes = [compile(ex.source, test.filename, "exec") for ex in test.examples]
         locs = {}
         globs = test.globs.copy()
