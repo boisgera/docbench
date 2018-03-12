@@ -81,10 +81,7 @@ def profile(objects, output_dir=None):
             continue
         profile = cProfile.Profile()
         path = output / (test.name + '.kcg')
-        try:
-            output_file = path.open('w', encoding='utf-8')
-        except TypeError:
-            output_file = path.open('w')
+        output_file = path.open('w', encoding='utf-8')
         codes = [compile(ex.source, test.filename, "exec") for ex in test.examples]
         locs = {}
         globs = test.globs.copy()
